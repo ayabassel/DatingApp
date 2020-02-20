@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DatingApp.API.Dtos;
 using DatingApp.API.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -11,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace DatingApp.API.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -22,7 +24,7 @@ namespace DatingApp.API.Controllers
             _IConfigure = IConfigure;
             _repo = repo;
         }
-
+        [AllowAnonymous] 
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
@@ -41,9 +43,12 @@ namespace DatingApp.API.Controllers
 
         }
 
+        [AllowAnonymous] 
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
+            //throw new System.Exception("The computer says NO!");
+            
             var userFromRepo = await _repo.Login(userForLoginDto.username.ToLower(), userForLoginDto.password);
 
             if (userFromRepo == null)
