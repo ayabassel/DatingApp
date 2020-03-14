@@ -4,13 +4,14 @@ import {map} from 'rxjs/operators';
 import { error } from 'util';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import { from } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-   baseURL = 'http://localhost:5000/api/auth/';
+   baseURL = environment.apiUrl + 'auth/';
    decodedToken: any;
    jwtHelper: JwtHelperService = new JwtHelperService();
 
