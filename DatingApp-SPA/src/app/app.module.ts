@@ -23,6 +23,11 @@ import { from } from 'rxjs';
 import { UserDetailComponent } from './members/member-list/user-detail/user-detail.component';
 import { MemberDetailResolver } from './_resolvers/member-detail.resolver';
 import { MemberListResolver } from './_resolvers/member-list.resolver';
+import { MemberEditComponent } from './members/member-list/member-card/member-edit/member-edit.component';
+import { MemberEditResolver } from './_resolvers/member-edit.resolver';
+import { AlertifyService } from './_Services/Alertify.service';
+import { AuthGuard } from './_guards/auth.guard';
+import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
 
 export function _tokenGetter() {
    return localStorage.getItem('token');
@@ -43,7 +48,8 @@ export class CustomHammerConfig extends HammerGestureConfig  {
       ListsComponent,
       MemberCardComponent,
       MessagesComponent,
-      UserDetailComponent
+      UserDetailComponent,
+      MemberEditComponent
    ],
    imports: [
       BrowserModule,
@@ -64,9 +70,13 @@ export class CustomHammerConfig extends HammerGestureConfig  {
    providers: [
       AuthService,
       UserService,
+      AlertifyService,
+      AuthGuard,
+      PreventUnsavedChanges,
       ErrorInterceptorProvidor,
       MemberDetailResolver,
       MemberListResolver,
+      MemberEditResolver,
       { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig }
 
    ],
