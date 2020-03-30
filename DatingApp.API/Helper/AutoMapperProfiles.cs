@@ -1,5 +1,6 @@
 using System.Linq;
 using AutoMapper;
+using DatingApp.API.Data;
 using DatingApp.API.Dtos;
 using DatingApp.API.Model;
 
@@ -18,6 +19,8 @@ namespace DatingApp.API.Helper
                 .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.DateOfBirth.CalculateAge()));
             CreateMap<Photos, PhotosForDetailedDto>();
             CreateMap<UserUpdateDto, User>();
+            CreateMap<PhotoFRomUserDto, Photos>();
+            CreateMap<Photos, ReturnedPhotoDto>();
         }
     }
 }
