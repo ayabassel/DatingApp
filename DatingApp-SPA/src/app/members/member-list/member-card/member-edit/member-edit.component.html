@@ -51,9 +51,9 @@
                 <H4>Introduction:</H4>
                 <textarea name="introduction" rows="6" class="form-control" [(ngModel)]="user.introduction"></textarea>
                 <H4>Looking for:</H4>
-                <textarea name="LookingFor" rows="6" class="form-control" [(ngModel)]="user.lookingFor"></textarea>
+                <textarea name="lookingFor" rows="6" class="form-control" [(ngModel)]="user.lookingFor"></textarea>
                 <h4>Interests</h4>
-                <textarea name="Interests" rows="6" class="form-control" [(ngModel)]="user.interests"></textarea>
+                <textarea name="interests" rows="6" class="form-control" [(ngModel)]="user.interests"></textarea>
                 <h4>Location Details:</h4>
                 <div class="form-inline">
                   <label for="city">City</label>
@@ -64,7 +64,7 @@
               </form>
               </tab>
                   <tab heading="Edit Photos">
-                       <p>EDit photos will be here!</p>
+                       <app-photo-editor [photos] = "user.photos"></app-photo-editor>
                   </tab>
              </tabset> 
           </div>  

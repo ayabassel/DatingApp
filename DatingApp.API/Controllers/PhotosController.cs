@@ -90,6 +90,8 @@ namespace DatingApp.API.Controllers
                 if(!userFromRepo.Photos.Any(u => u.IsMain))
                 photo.IsMain = true;
 
+                userFromRepo.Photos.Add(photo);
+
                 if(await _repo.SaveAll()) {
                     var returedPhoto = _mapper.Map<ReturnedPhotoDto>(photo);
                     return CreatedAtRoute("GetPhoto", new { userId = userId, id = photo.ID }, returedPhoto );
