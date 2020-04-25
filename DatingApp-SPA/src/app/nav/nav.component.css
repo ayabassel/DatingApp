@@ -1,3 +1,11 @@
 .dropdown-toggle, .dropdown-item {
     cursor: pointer;
 }
+
+.img {
+   
+    /* max-height: 10px;
+    max-width: 10px; */
+    border: 2px;
+    display: inline;
+}
