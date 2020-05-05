@@ -9,11 +9,14 @@ import { catchError } from 'rxjs/operators';
 
 export class MemberListResolver implements Resolve<User> {
 
+    pageNumber = 1;
+    pageSize = 5;
+
     constructor(private userService: UserService, private router: Router, private alertify: AlertifyService) {}
 
-    resolve(): Observable<User> {
+    resolve(route: ActivatedRouteSnapshot): Observable<User> {
         // tslint:disable-next-line: no-string-literal
-        return this.userService.getUsers().pipe(
+        return this.userService.getUsers(this.pageSize, this.pageNumber).pipe(
             catchError( error => {
                 this.alertify.error('Data Retrieving Problem!');
                 this.router.navigate(['']);
