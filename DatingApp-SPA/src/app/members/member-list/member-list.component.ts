@@ -15,9 +15,6 @@ export class MemberListComponent implements OnInit {
 
   users: User[];
   pagination: Pagination;
-  minAge: number;
-  maxAge: number;
-  gender: string;
   user: User = JSON.parse(localStorage.getItem('user'));
   genderList = [{value: 'male', display: 'males'}, {value: 'female', display: 'females'}];
   userPrams: any = {};

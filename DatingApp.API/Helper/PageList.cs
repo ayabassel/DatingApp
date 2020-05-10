@@ -24,8 +24,9 @@ namespace DatingApp.API.Helper
 
         public static async Task<PageList<T>> CreateAsync(IQueryable<T> source, int pagenumber, int pagesize)  {
 
+            var count =  source.Count();
             var items = await source.Skip(pagesize* (pagenumber - 1)).Take(pagesize).ToListAsync();
-            var count =  items.Count();
+            
 
             return new PageList<T>(items, count, pagenumber, pagesize);
         }

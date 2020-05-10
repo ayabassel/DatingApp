@@ -73,5 +73,31 @@ namespace DatingApp.API.Controllers
 
         }
 
+        [HttpPost("{userid}/like/{recipientId}")]
+        public async Task<IActionResult> LikeUser(int userId, int recipientId) {
+
+            var like = await _repo.GetLike(userId,recipientId);
+
+            if(like != null)
+            return BadRequest("This user is already liked!");
+
+            if(await _repo.GetUser(recipientId) == null)
+            return NotFound();
+
+            like = new Like {
+                LikeeId = recipientId,
+                LikerId = userId
+            };
+
+            _repo.Add<Like>(like);
+
+            if(await _repo.SaveAll()) {
+                return Ok();
+            }
+
+            return BadRequest("Error Happened During Liking The User!");
+
+        }
+
     }
 }
