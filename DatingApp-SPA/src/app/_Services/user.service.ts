@@ -113,7 +113,7 @@ getMessagesThread(userId: number, recipientId: number) {
 }
 
 makeMessage(userId: number, message: Message) {
-  return this.http.post(this.baseUrl + 'users/' + userId + 'messages', message);
+  return this.http.post(this.baseUrl + 'users/' + userId + '/messages', message);
 }
 
 deleteMessage(userId: number, id: number) {
