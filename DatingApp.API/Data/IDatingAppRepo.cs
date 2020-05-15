@@ -22,7 +22,7 @@ namespace DatingApp.API.Data
          Task<Like> GetLike(int userId, int recipientId);
 
          Task<Message> GetMessage(int messageId);
-         Task<PageList<Message>> GetUserMessages();
+         Task<PageList<Message>> GetUserMessages(MessageParam messageParam);
          Task<IEnumerable<Message>> GetMessageThread(int userId, int recipientId);
 
          

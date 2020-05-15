@@ -10,6 +10,7 @@ import { AlertifyService } from './Alertify.service';
 import { PaginationResult } from '../_models/Pagination';
 import { map } from 'rxjs/operators';
 import { JsonPipe } from '@angular/common';
+import { Message } from '../_models/Message';
 
 
 
@@ -82,6 +83,45 @@ deletePhoto(userId: number, photoId: string) {
 
 likeUser(userId: number, likeeId: number) {
   return this.http.post(this.baseUrl + 'users/' + userId + '/like/' + likeeId, {});
+}
+
+getUserMessages(userId: number, pageSize?, pageNumber?, messageState?): Observable<PaginationResult<Message[]>>  {
+  const paginationResult: PaginationResult<Message[]> = new PaginationResult<Message[]>();
+  let params = new HttpParams();
+
+  params = params.append('MessageState', messageState);
+
+  if (pageSize != null && pageNumber != null) {
+    params = params. append('pageSize', pageSize);
+    params = params.append('pageNumber', pageNumber);
+  }
+
+  return this.http.get<Message[]>(this.baseUrl + 'users/' + userId + '/messages', {observe: 'response', params}).pipe(
+    map( response => {
+      paginationResult.result = response.body;
+      if (response.headers.get('Pagination') !== null) {
+        paginationResult.pagination = JSON.parse(response.headers.get('Pagination'));
+      }
+
+      return paginationResult;
+    })
+  );
+}
+
+getMessagesThread(userId: number, recipientId: number) {
+  return this.http.get<Message[]>(this.baseUrl + 'users/' + userId  + '/messages/thread/' + recipientId);
+}
+
+makeMessage(userId: number, message: Message) {
+  return this.http.post(this.baseUrl + 'users/' + userId + 'messages', message);
+}
+
+deleteMessage(userId: number, id: number) {
+  return this.http.post(this.baseUrl + 'users/' + userId + '/messages/' + id, {});
+}
+
+markMessageAsRead(userId: number, id: number) {
+  return this.http.post(this.baseUrl + 'users/' + userId + '/messages/' + id + '/read', {}).subscribe();
 }
 
 }

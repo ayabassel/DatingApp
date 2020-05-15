@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { User } from 'src/app/_models/user';
 import { UserService } from 'src/app/_Services/user.service';
 import { AlertifyService } from 'src/app/_Services/Alertify.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery';
+import { TabsetComponent } from 'ngx-bootstrap';
 
 
 @Component({
@@ -12,7 +13,7 @@ import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gal
   styleUrls: ['./user-detail.component.css']
 })
 export class UserDetailComponent implements OnInit {
-
+  @ViewChild('memberTabs', {static: true}) memberTab: TabsetComponent;
   user: User;
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
@@ -23,6 +24,10 @@ export class UserDetailComponent implements OnInit {
     this.activatedroute.data.subscribe(data => {
       // tslint:disable-next-line: no-string-literal
       this.user = data['user'];
+    });
+    this.activatedroute.queryParams.subscribe(param => {
+      const selectedTab = param['tab'];
+      this.memberTab.tabs[selectedTab > 0 ? selectedTab : 0].active = true;
     });
 
     this.galleryOptions = [
@@ -52,6 +57,10 @@ export class UserDetailComponent implements OnInit {
     return imagesUrl;
 
 
+  }
+
+  selectTabs(tabNumber: number) {
+    this.memberTab.tabs[tabNumber].active = true;
   }
 
 

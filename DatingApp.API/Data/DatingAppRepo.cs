@@ -32,9 +32,15 @@ namespace DatingApp.API.Data
             return await _context.Messages.FirstOrDefaultAsync(m => m.Id == messageId);
         }
 
-        public Task<IEnumerable<Message>> GetMessageThread(int userId, int recipientId)
+        public async Task<IEnumerable<Message>> GetMessageThread(int userId, int recipientId)
         {
-            throw new NotImplementedException();
+            var messages = await _context.Messages
+                            .Include(i => i.Sender).ThenInclude(i => i.Photos)
+                            .Include(i => i.Recpient).ThenInclude(i => i.Photos)
+                            .Where(m => m.RecipientId == userId && m.SenderId == recipientId && m.RecipientDelete == false
+                            || m.RecipientId == recipientId && m.SenderId == userId && m.SenderDelete == false )
+                            .ToListAsync();
+            return  messages;
         }
 
         public async Task<Photos> GetPhoto(int photoId)
@@ -49,9 +55,33 @@ namespace DatingApp.API.Data
             return user;
         }
 
-        public Task<PageList<Message>> GetUserMessages()
+        public async Task<PageList<Message>> GetUserMessages(MessageParam messageParam)
         {
-            throw new NotImplementedException();
+            var messages =  _context.Messages
+                            .Include(i => i.Sender).ThenInclude(i => i.Photos)
+                            .Include(i => i.Recpient).ThenInclude(i => i.Photos)
+                            .AsQueryable();
+            
+            switch (messageParam.MessageState) {
+
+                case "Inbox":
+                     messages = messages.Where(m => m.RecipientId == messageParam.UserId && m.RecipientDelete == false);
+                     break;
+                case "Outbox":
+                      messages = messages.Where(m => m.SenderId == messageParam.UserId && m.SenderDelete == false);
+                      break;
+                default:
+                     messages = messages.Where(m => m.RecipientId == messageParam.UserId && m.RecipientDelete == false);
+                     //messages = messages.Where(m => m.IsRead == false);
+                     break;
+
+            }
+            messages = messages.OrderByDescending(m => m.MessageSentTime);  
+
+          
+           return await PageList<Message>.CreateAsync(messages, messageParam.PageNumber, messageParam.pageSize);
+           
+            
         }
 
         public async Task<PageList<User>> GetUsers(UserPrams prams)
